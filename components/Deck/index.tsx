@@ -46,9 +46,9 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
     revealed: {
       // Adicionamos a opacidade explicitamente como array para evitar que o TS/Framer tente esconder a carta
       opacity: [1, 1, 1],
-      x: [0, 550, 0],
+      x: [0, 0, 0],
       y: [0, 0, 0],
-      z: 50,
+      z: [50, 500, 0],
       rotateY: [0, 0, -180],
       scale: [1, 1.05, 1.1],
       zIndex: 1000, // Valor bem alto para garantir que fique acima de tudo
@@ -99,7 +99,7 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
           >
             {/* LADO A: FRENTE (Capa) */}
             <div
-              className="absolute inset-0 backface-hidden bg-white rounded-2xl p-6 flex flex-col items-center justify-center border-2 border-slate-200 shadow-xl"
+              className="absolute inset-0 backface-hidden bg-white rounded-2xl p-6 flex cursor-pointer flex-col items-center justify-center border-2 border-slate-200 shadow-xl"
               style={{
                 transform: "translateZ(1px)", // Joga a frente 1px para "fora"
               }}
@@ -142,13 +142,13 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ delay: 0.4, duration: 0.3 }}
-            className="w-full space-y-5 px-4 flex flex-col gap-4"
+            className="w-full md:grid md:grid-cols-2  gap-4 p-0"
           >
             {question.options.map((option, index) => (
               <button
                 key={index}
                 onClick={() => handleAnswerClick(index)}
-                className="text-left text-sm transition-all duration-200 ease-out
+                className="text-left text-sm transition-all duration-200 ease-out md:h-22 cursor-pointer
              hover:bg-white/20 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
                 style={{
                   // Forçando a borda que o Tailwind não quis renderizar

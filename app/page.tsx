@@ -59,7 +59,12 @@ export default function JogoPage() {
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="mt-6 bg-blue-600 px-6 py-2 rounded-full font-bold hover:bg-blue-500 transition-colors"
+          className="mt-6 bg-blue-600 px-6 py-2 h-10 w-38 rounded-full font-bold transition-colors cursor-pointer
+          hover:bg-white/20 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+          style={{
+            borderRadius: "8px",
+            backgroundColor: "#155dfc",
+          }}
         >
           Jogar Novamente
         </button>

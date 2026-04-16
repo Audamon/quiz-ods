@@ -68,9 +68,12 @@ export default function JogoPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-900 p-4 overflow-hidden">
+    <main
+      className="flex flex-col items-center justify-center bg-slate-900 p-4 overflow-auto"
+      style={{ padding: "16px" }}
+    >
       {/* HUD de Progresso */}
-      <div className="absolute top-10 flex flex-col items-center">
+      <div className=" top-10 shrink-0 flex flex-col items-center">
         <span className="text-blue-400 text-sm font-mono uppercase tracking-widest">
           Progresso
         </span>
@@ -98,7 +101,7 @@ export default function JogoPage() {
       </AnimatePresence>
 
       {/* Pontuação atual (discreto) */}
-      <div className="absolute bottom-10 text-slate-400 text-sm">
+      <div className=" bottom-10 shrink-0 text-slate-400 text-sm">
         Pontuação: <span className="text-white font-bold">{score}</span>
       </div>
     </main>

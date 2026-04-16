@@ -22,11 +22,13 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
 
   const handleAnswerClick = (index: number) => {
     // Quando responder, primeiro "esconde" a pergunta
-    setIsRevealed(false);
+    //setIsRevealed(false);
+    setIsExiting(true);
     // Espera a animação de saída terminar e chama a função do Page
     setTimeout(() => {
       onAnswer(index);
-    }, 300);
+      // Inicia a animação de saída
+    }, 1200);
   };
 
   // Variantes para animação da carta
@@ -44,8 +46,9 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
     revealed: {
       // Adicionamos a opacidade explicitamente como array para evitar que o TS/Framer tente esconder a carta
       opacity: [1, 1, 1],
-      x: [0, 450, 0],
+      x: [0, 550, 0],
       y: [0, 0, 0],
+      z: 50,
       rotateY: [0, 0, -180],
       scale: [1, 1.05, 1.1],
       zIndex: 1000, // Valor bem alto para garantir que fique acima de tudo
@@ -63,17 +66,21 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
     },
     // NOVA VARIANTE DE SAÍDA
     exit: {
-      y: -1000, // Sobe para fora da tela
-      opacity: 0,
+      y: -1000,
+      rotateY: -180, // Mantém ela virada para o lado da pergunta enquanto sobe
+      opacity: 1,
       scale: 0.8,
-      transition: { duration: 0.5, ease: "anticipate" },
+      transition: {
+        duration: 1,
+        ease: [0.45, 0, 0.55, 1], // Um ease mais dramático para a saída
+      },
     },
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto h-[600px] [transform-style:preserve-3d] perspective-1000">
+    <div className="flex flex-col items-center shrink-0 justify-center scroll-auto w-full max-w-sm mx-auto gap-8 min-h-screen py-10 [transform-style:preserve-3d] perspective-1000">
       {/* Container do Monte (Deck) Angulado */}
-      <div className="relative w-64 h-80 mb-10 transform-style-3d rotate-x-12">
+      <div className="relative w-64 h-80 sm:w-58 sm:h-74 mb-10 flex justify-start transform-style-3d rotate-x-12">
         {/* Cartas Decorativas de Fundo (Monte) */}
         <div className="absolute inset-0 bg-slate-300 rounded-2xl shadow-sm rotate-6 translate-y-3 translate-x-1" />
         <div className="absolute inset-0 bg-slate-200 rounded-2xl shadow-md -rotate-3 translate-y-2" />
@@ -81,12 +88,14 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
         {/* Carta do Topo (Interativa) */}
         <AnimatePresence mode="wait">
           <motion.div
+            key={currentIndex}
             variants={cardVariants}
             initial="hidden"
-            animate={isRevealed ? "revealed" : "visible"}
+            animate={isExiting ? "exit" : isRevealed ? "revealed" : "visible"}
+            exit="exit"
             whileHover={!isRevealed ? "hover" : undefined}
             onClick={handleCardClick}
-            className="relative w-full h-full transform-style-3d transition-transform "
+            className="relative w-full h-full v transform-style-3d transition-transform flex p-6 justify-center items-center "
           >
             {/* LADO A: FRENTE (Capa) */}
             <div
@@ -105,17 +114,21 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
 
             {/* LADO B: VERSO (Pergunta) */}
             <div
-              className="absolute inset-0 backface-hidden bg-blue-700 rounded-2xl p-6 flex flex-col text-white border-2 border-white shadow-xl"
+              className="absolute inset-0 backface-hidden bg-blue-700 rounded-2xl p-4  flex flex-col  text-white border-2 border-white shadow-xl"
               style={{
+                display: "flex",
+                padding: "16px",
+                border: "4px solid white",
+                gap: "16px",
                 transform: "rotateY(180deg) translateZ(1px)", // Gira e também joga 1px para "fora" do seu próprio plano
               }}
             >
-              <span className="text-xs font-bold opacity-70 uppercase">
+              <div className="text-xs font-bold  uppercase">
                 {question.topic}
-              </span>
-              <h2 className="mt-4 text-lg font-medium leading-tight">
+              </div>
+              <div className="mt-4 text-md sm:text-sm font-medium p-6 leading-tight">
                 {question.question}
-              </h2>
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -129,13 +142,25 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ delay: 0.4, duration: 0.3 }}
-            className="w-full space-y-3 px-4"
+            className="w-full space-y-5 px-4 flex flex-col gap-4"
           >
             {question.options.map((option, index) => (
               <button
                 key={index}
                 onClick={() => handleAnswerClick(index)}
-                className="w-full py-3 px-4 text-left text-sm bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl transition-colors text-white font-medium shadow-md"
+                className="text-left text-sm transition-all duration-200 ease-out
+             hover:bg-white/20 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+                style={{
+                  // Forçando a borda que o Tailwind não quis renderizar
+                  border: "2px solid #FFFFFF",
+                  padding: "4px ",
+                  display: "block",
+                  backgroundColor: "transparent",
+                  outline: "none",
+                  borderRadius: "8px",
+                  boxSizing: "border-box",
+                  background: "#155dfc",
+                }}
               >
                 {option}
               </button>

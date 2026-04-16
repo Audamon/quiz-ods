@@ -13,6 +13,20 @@
       ],
       "answerIndex": 1,
       "explanation": "A preservação do patrimônio histórico é fundamental para o ODS 4 (Educação de Qualidade), pois permite que as futuras gerações compreendam suas raízes e aprendam com a história da sua sociedade."
+    },
+    {
+      "id": "2",
+      "topic": "Patrimônio de Caxias",
+      "ods": 4,
+      "question": "O Monumento Nacional ao Imigrante, localizado na entrada de Caxias do Sul, foi inaugurado em 1954. Além de homenagear o passado, ele funciona como um espaço educativo. Qual é a principal função de preservarmos monumentos históricos para a educação da sociedade?",
+      "options": [
+        "Apenas decorar a entrada da cidade.",
+        "Garantir a manutenção da memória coletiva e o acesso à história local.",
+        "Servir como ponto de referência para motoristas.",
+        "Aumentar o valor dos imóveis ao redor."
+      ],
+      "answerIndex": 1,
+      "explanation": "A preservação do patrimônio histórico é fundamental para o ODS 4 (Educação de Qualidade), pois permite que as futuras gerações compreendam suas raízes e aprendam com a história da sua sociedade."
     }
   ]
 }

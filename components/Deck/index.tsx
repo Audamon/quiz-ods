@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Question } from "@/specs/quiz";
 
@@ -13,9 +13,34 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
   // Estado para controlar se a carta do topo foi clicada/revelada
   const [isRevealed, setIsRevealed] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const flipSoundRef = useRef<HTMLAudioElement | null>(null);
+  const playFlipSound = () => {
+    // Cria o objeto apenas se não existir ou se a fonte estiver vazia
+    if (!flipSoundRef.current) {
+      flipSoundRef.current = new Audio("/sounds/flip.wav");
+      flipSoundRef.current.playbackRate = 0.7 + Math.random() * 0.2;
+      flipSoundRef.current.volume = 0.5;
+    }
 
+    // Se o link externo falhou, pode ser política de segurança (CORS).
+    // Com arquivo local, garantimos que o caminho seja absoluto
+    flipSoundRef.current.currentTime = 0;
+    const promise = flipSoundRef.current.play();
+
+    if (promise !== undefined) {
+      promise.catch((error) => {
+        // Se cair aqui, o navegador bloqueou por falta de interação prévia
+        console.error("Erro ao reproduzir:", error);
+
+        // Tática de "Recuperação": Tentar re-instanciar
+        flipSoundRef.current = new Audio("/sounds/flip.wav");
+        flipSoundRef.current.play();
+      });
+    }
+  };
   const handleCardClick = () => {
     if (!isRevealed) {
+      playFlipSound();
       setIsRevealed(true);
     }
   };

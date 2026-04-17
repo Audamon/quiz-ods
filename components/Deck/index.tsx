@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Question } from "@/specs/quiz";
 
@@ -14,6 +14,30 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
   const [isRevealed, setIsRevealed] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const flipSoundRef = useRef<HTMLAudioElement | null>(null);
+  const whooshSoundRef = useRef<HTMLAudioElement | null>(null);
+  const isPlayingWhoosh = useRef(false);
+  const playWhooshSound = () => {
+    if (isPlayingWhoosh.current) return; // Evita sobreposição de sons
+    if (!whooshSoundRef.current) {
+      whooshSoundRef.current = new Audio("/sounds/whoosh.mp3");
+      whooshSoundRef.current.playbackRate = 0.9;
+      whooshSoundRef.current.volume = 0.3;
+    }
+    isPlayingWhoosh.current = true;
+    whooshSoundRef.current.currentTime = 0;
+    const promise = whooshSoundRef.current.play();
+
+    if (promise !== undefined) {
+      promise.catch((error) => {
+        console.error("Erro ao reproduzir:", error);
+        whooshSoundRef.current = new Audio("/sounds/whoosh.mp3");
+        whooshSoundRef.current.play();
+      });
+    }
+  };
+  useEffect(() => {
+    isPlayingWhoosh.current = false;
+  }, [currentIndex]);
   const playFlipSound = () => {
     // Cria o objeto apenas se não existir ou se a fonte estiver vazia
     if (!flipSoundRef.current) {
@@ -49,6 +73,9 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
     // Quando responder, primeiro "esconde" a pergunta
     //setIsRevealed(false);
     setIsExiting(true);
+    setTimeout(() => {
+      playWhooshSound();
+    }, 400);
     // Espera a animação de saída terminar e chama a função do Page
     setTimeout(() => {
       onAnswer(index);

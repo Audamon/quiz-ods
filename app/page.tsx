@@ -74,7 +74,7 @@ export default function JogoPage() {
 
   return (
     <main
-      className="flex flex-col items-center justify-center bg-slate-900 p-4 overflow-auto"
+      className="flex w-full flex-col items-center justify-center bg-slate-900 p-4 gap-8 overflow-auto min-h-screen"
       style={{ padding: "16px" }}
     >
       {/* HUD de Progresso */}
@@ -96,6 +96,7 @@ export default function JogoPage() {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -100, opacity: 0 }}
           transition={{ duration: 0.3 }}
+          className="w-full flex justify-center align-middle "
         >
           <Deck
             question={questions[currentIndex]}

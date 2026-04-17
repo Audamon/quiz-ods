@@ -78,7 +78,7 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
   };
 
   return (
-    <div className="flex flex-col items-center shrink-0 justify-center scroll-auto w-full max-w-sm mx-auto gap-8 min-h-screen py-10 [transform-style:preserve-3d] perspective-1000">
+    <div className="flex flex-col lg:flex-row 2xl:flex-col items-center shrink-0 justify-center scroll-auto w-full max-w-4xl mx-auto gap-8  py-10 [transform-style:preserve-3d] perspective-1000">
       {/* Container do Monte (Deck) Angulado */}
       <div className="relative w-64 h-80 sm:w-58 sm:h-74 mb-10 flex justify-start transform-style-3d rotate-x-12">
         {/* Cartas Decorativas de Fundo (Monte) */}
@@ -142,13 +142,13 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ delay: 0.4, duration: 0.3 }}
-            className="w-full md:grid md:grid-cols-2  gap-4 p-0"
+            className=" grid grid-cols-2  gap-4 p-0"
           >
             {question.options.map((option, index) => (
               <button
                 key={index}
                 onClick={() => handleAnswerClick(index)}
-                className="text-left text-sm transition-all duration-200 ease-out md:h-22 cursor-pointer
+                className="text-left text-sm transition-all duration-200 ease-out md:h-22 md:w-48 cursor-pointer
              hover:bg-white/20 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
                 style={{
                   // Forçando a borda que o Tailwind não quis renderizar

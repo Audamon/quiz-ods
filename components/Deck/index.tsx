@@ -7,12 +7,22 @@ interface DeckProps {
   question: Question;
   onAnswer: (index: number) => void;
   currentIndex: number; // Para animar a entrada de novas cartas
+  isAnswerCorrect: boolean | null; // Para feedback visual de acerto/erro
+  onNextQuestion: () => void; // Para avançar para a próxima pergunta após feedback
 }
 
-export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
+export default function Deck({
+  question,
+  onAnswer,
+  currentIndex,
+  isAnswerCorrect,
+  onNextQuestion,
+}: DeckProps) {
   // Estado para controlar se a carta do topo foi clicada/revelada
   const [isRevealed, setIsRevealed] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const flipSoundRef = useRef<HTMLAudioElement | null>(null);
   const whooshSoundRef = useRef<HTMLAudioElement | null>(null);
   const isPlayingWhoosh = useRef(false);
@@ -70,16 +80,21 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
   };
 
   const handleAnswerClick = (index: number) => {
-    // Quando responder, primeiro "esconde" a pergunta
-    //setIsRevealed(false);
+    setSelectedIndex(index);
+    setIsAnswered(true);
+
+    onAnswer(index);
+  };
+  const handleNextQuestionClick = () => {
+    setIsAnswered(false);
     setIsExiting(true);
     setTimeout(() => {
       playWhooshSound();
     }, 400);
-    // Espera a animação de saída terminar e chama a função do Page
     setTimeout(() => {
-      onAnswer(index);
-      // Inicia a animação de saída
+      //setIsRevealed(false);
+      setSelectedIndex(null);
+      onNextQuestion();
     }, 1200);
   };
 
@@ -190,6 +205,7 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
       <AnimatePresence>
         {isRevealed && (
           <motion.div
+            key="answers-grid"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -198,7 +214,7 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
           >
             {question.options.map((option, index) => (
               <button
-                key={index}
+                key={`${currentIndex}-${index}-`} // Garantindo chave única mesmo com opções repetidas
                 onClick={() => handleAnswerClick(index)}
                 className="text-left text-sm transition-all duration-200 ease-out md:h-22 md:w-48 cursor-pointer
              hover:bg-white/20 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
@@ -211,12 +227,45 @@ export default function Deck({ question, onAnswer, currentIndex }: DeckProps) {
                   outline: "none",
                   borderRadius: "8px",
                   boxSizing: "border-box",
-                  background: "#155dfc",
+                  background: isAnswered
+                    ? index === question.answerIndex
+                      ? "#4ade80" // sempre verde = resposta correta
+                      : index === selectedIndex
+                        ? "#f87171" // vermelho = o que o usuário clicou errado
+                        : "#155dfc" // outros ficam azul
+                    : "#155dfc",
                 }}
               >
                 {option}
               </button>
             ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isAnswered && (
+          <motion.div
+            key="feedback"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0, z: 600 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ delay: 0.4, duration: 0.3 }}
+            className="text-center text-lg font-bold mt-4 fixed top-1/4 left-1/4  flex flex-col justify-center items-center w-1/2 h-1/2"
+            style={{
+              zIndex: "9999999",
+              background:
+                "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,0,0,0.92) 30%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0) 100%)",
+              filter: "drop-shadow(0 0 30px rgba(0,0,0,0.5))",
+            }}
+          >
+            {isAnswerCorrect ? "Correto!" : "Errado!"}
+            <button
+              onClick={handleNextQuestionClick}
+              className=" w-48 ml-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-white/20 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] cursor-pointer"
+              style={{ backgroundColor: "#155dfc", borderRadius: "8px" }}
+            >
+              Próxima
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

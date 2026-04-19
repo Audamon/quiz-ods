@@ -10,6 +10,7 @@ export default function JogoPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
   const [gameState, setGameState] = useState<
     "loading" | "playing" | "finished"
   >("loading");
@@ -29,17 +30,32 @@ export default function JogoPage() {
 
     if (isCorrect) {
       setScore((prev) => prev + 1);
+      setIsAnswerCorrect(true);
       // Aqui você pode adicionar um som ou feedback visual de acerto
+    } else {
+      setIsAnswerCorrect(false);
     }
 
+    // Espera um pouco para o jogador ver o feedback e pula para a próxima
+    // setTimeout(() => {
+    //   if (currentIndex < questions.length - 1) {
+    //     setCurrentIndex((prev) => prev + 1);
+    //     setIsAnswerCorrect(null); // Reseta o feedback para a próxima pergunta
+    //   } else {
+    //     setGameState("finished");
+    //   }
+    // }, 500);
+  };
+  const handleNextQuestion = () => {
     // Espera um pouco para o jogador ver o feedback e pula para a próxima
     setTimeout(() => {
       if (currentIndex < questions.length - 1) {
         setCurrentIndex((prev) => prev + 1);
+        setIsAnswerCorrect(null); // Reseta o feedback para a próxima pergunta
       } else {
         setGameState("finished");
       }
-    }, 500);
+    }, 1500);
   };
 
   if (gameState === "loading") {
@@ -102,6 +118,8 @@ export default function JogoPage() {
             question={questions[currentIndex]}
             currentIndex={currentIndex}
             onAnswer={handleAnswer}
+            isAnswerCorrect={isAnswerCorrect}
+            onNextQuestion={handleNextQuestion}
           />
         </motion.div>
       </AnimatePresence>

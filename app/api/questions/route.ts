@@ -1,14 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { Question } from "@/specs/quiz"; // Certifique-se de ter esse type
-import { details } from "framer-motion/client";
-
-// Defina a chave fora para falhar cedo caso não exista
-const API_KEY = process.env.GEMINI_API_KEY;
-const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
-
+export const dynamic = "force-dynamic"; // Força a execução dinâmica para cada requisição
 export async function POST(req: Request) {
   try {
+    // Defina a chave fora para falhar cedo caso não exista
+    const API_KEY = process.env.GEMINI_API_KEY;
+    const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
     // 1. Validação da API Key
     if (!genAI) {
       return NextResponse.json(
@@ -19,10 +17,13 @@ export async function POST(req: Request) {
 
     const { topic, ods } = await req.json();
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      generationConfig: { responseMimeType: "application/json" },
-    });
+    const model = genAI.getGenerativeModel(
+      {
+        model: "gemini-1.5-flash",
+        generationConfig: { responseMimeType: "application/json" },
+      },
+      { apiVersion: "v1" },
+    );
 
     const prompt = `
         Atue como um educador especializado em Computação e Cultura.

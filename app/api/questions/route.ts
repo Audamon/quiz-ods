@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const model = genAI.getGenerativeModel(
       {
         model: "gemini-1.5-flash",
-        generationConfig: { responseMimeType: "application/json" },
+        //generationConfig: { responseMimeType: "application/json" },
       },
       { apiVersion: "v1" },
     );
@@ -45,8 +45,11 @@ export async function POST(req: Request) {
       `;
 
     const result = await model.generateContent(prompt);
-    const text = result.response.text();
-
+    let text = result.response.text();
+    const jsonMatch = text.match(/\[[\s\S]*\]/); // Procura o início [ e fim ] do array
+    if (jsonMatch) {
+      text = jsonMatch[0];
+    }
     // 2. Parse e tipagem
     const questions: Question[] = JSON.parse(text);
 

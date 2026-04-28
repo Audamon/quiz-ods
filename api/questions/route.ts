@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
-import { Question } from "@/types/Question"; // Certifique-se de ter esse type
+import { Question } from "@/specs/quiz"; // Certifique-se de ter esse type
 
 // Defina a chave fora para falhar cedo caso não exista
 const API_KEY = process.env.GEMINI_API_KEY;

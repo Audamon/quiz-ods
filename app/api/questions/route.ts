@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { Question } from "@/specs/quiz"; // Certifique-se de ter esse type
+import { details } from "framer-motion/client";
 
 // Defina a chave fora para falhar cedo caso não exista
 const API_KEY = process.env.GEMINI_API_KEY;
@@ -55,13 +56,18 @@ export async function POST(req: Request) {
     }));
 
     return NextResponse.json(questionsWithIds);
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     console.error("Erro na API Gemini:", error);
 
     // Em vez de chamar getQuestions aqui (que é client-side),
     // retornamos um erro para o front-end decidir o que fazer.
     return NextResponse.json(
-      { error: "Falha ao gerar perguntas dinâmicas" },
+      {
+        error: "Falha ao gerar perguntas dinâmicas",
+        details: error.message,
+        stack: error.stack,
+      },
       { status: 500 },
     );
   }

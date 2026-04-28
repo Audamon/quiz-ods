@@ -6,7 +6,10 @@ interface MenuProps {
   onSetGameType?: (type: "single" | "ai" | "multi") => void; // Opcional, para futuras expansões
 }
 
-export default function Menu({ onStartSinglePlayer, onSetGameType }: MenuProps) {
+export default function Menu({
+  onStartSinglePlayer,
+  onSetGameType,
+}: MenuProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
       <motion.div
@@ -39,7 +42,7 @@ export default function Menu({ onStartSinglePlayer, onSetGameType }: MenuProps) 
             👤
           </div>
         </motion.button>
-        <div className="flex flex-col w-full max-w-xs gap-4">
+
         {/* Botão Um Jogador */}
         <motion.button
           whileHover={{ scale: 1.05, x: 5 }}
@@ -57,7 +60,6 @@ export default function Menu({ onStartSinglePlayer, onSetGameType }: MenuProps) 
             👤
           </div>
         </motion.button>
-
 
         {/* Botão Multiplayer (Desabilitado por enquanto) */}
         <motion.button

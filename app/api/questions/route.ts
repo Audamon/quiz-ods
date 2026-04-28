@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         Retorne um ARRAY de objetos seguindo EXATAMENTE esta estrutura JSON:
         [
           {
-            "id": "string (uuid)",
+           
             "topic": "${topic}",
             "ods": ${ods},
             "question": "string",
@@ -49,7 +49,12 @@ export async function POST(req: Request) {
     const questions: Question[] = JSON.parse(text);
 
     // 3. Retorno correto com NextResponse
-    return NextResponse.json(questions);
+    const questionsWithIds = questions.map((q, index) => ({
+      ...q,
+      id: q.id || `gen-${Date.now()}-${index}`,
+    }));
+
+    return NextResponse.json(questionsWithIds);
   } catch (error) {
     console.error("Erro na API Gemini:", error);
 

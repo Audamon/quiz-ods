@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { getQuestions } from "@/services/questionService";
+import { generateQuestions, getQuestions } from "@/services/questionService";
 import { Question } from "@/specs/quiz";
 import Deck from "@/components/Deck";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,6 +15,7 @@ export default function JogoPage() {
   const [gameState, setGameState] = useState<
     "loading" | "playing" | "finished" | "menu"
   >("menu");
+  const [gameType, setGameType] = useState<"single" | "ai" | "multi" | "">("");
   const [isMuted, setIsMuted] = useState(false);
 
   const toggleMute = () => {
@@ -48,14 +49,22 @@ export default function JogoPage() {
   // Carrega as perguntas ao iniciar
   useEffect(() => {
     async function loadData() {
-      const data = await getQuestions(false); // false = usa o JSON local
+      let data: Question[] = [];
+      if (gameType === "ai") {
+        data = await generateQuestions(
+          "Diferenças culturais entre as regiões brasileiras",
+          4,
+        ); // true = usa a API do Gemini
+      } else if (gameType === "single") {
+        data = await getQuestions(false); // false = usa o JSON local
+      }
       setQuestions(data);
       if (gameState === "loading") {
         setGameState("playing");
       }
     }
     loadData();
-  }, [gameState]);
+  }, [gameState, gameType]);
 
   const handleAnswer = (selectedIndex: number) => {
     const isCorrect = selectedIndex === questions[currentIndex].answerIndex;
@@ -94,12 +103,14 @@ export default function JogoPage() {
     setCurrentIndex(0);
     setIsAnswerCorrect(null);
     setGameState("loading");
+    setGameType(gameType); // Mantém o tipo de jogo selecionado para recarregar as perguntas corretamente
   };
   const endGame = () => {
     setScore(0);
     setCurrentIndex(0);
     setIsAnswerCorrect(null);
     setGameState("menu");
+    setGameType(""); // Reseta o tipo de jogo para o menu inicial
   };
   if (gameState === "loading") {
     return (
@@ -148,7 +159,10 @@ export default function JogoPage() {
       style={{ padding: "16px" }}
     >
       {gameState === "menu" ? (
-        <Menu onStartSinglePlayer={() => setGameState("loading")} />
+        <Menu
+          onStartSinglePlayer={() => setGameState("loading")}
+          onSetGameType={setGameType}
+        />
       ) : (
         <>
           {/* HUD de Progresso */}

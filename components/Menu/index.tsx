@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 
 interface MenuProps {
   onStartSinglePlayer: () => void;
+  onSetGameType?: (type: "single" | "ai" | "multi") => void; // Opcional, para futuras expansões
 }
 
-export default function Menu({ onStartSinglePlayer }: MenuProps) {
+export default function Menu({ onStartSinglePlayer, onSetGameType }: MenuProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
       <motion.div
@@ -25,7 +26,12 @@ export default function Menu({ onStartSinglePlayer }: MenuProps) {
         <motion.button
           whileHover={{ scale: 1.05, x: 5 }}
           whileTap={{ scale: 0.95 }}
-          onClick={onStartSinglePlayer}
+          onClick={() => {
+            onStartSinglePlayer();
+            if (onSetGameType) {
+              onSetGameType("single");
+            }
+          }}
           className="group relative bg-white border-2 border-blue-600 p-5 rounded-2xl shadow-[4px_4px_0px_0px_rgba(37,99,235,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] hover:cursor-pointer transition-all flex items-center justify-between"
         >
           <span className="text-xl font-bold text-blue-700">Um Jogador</span>
@@ -33,6 +39,25 @@ export default function Menu({ onStartSinglePlayer }: MenuProps) {
             👤
           </div>
         </motion.button>
+        <div className="flex flex-col w-full max-w-xs gap-4">
+        {/* Botão Um Jogador */}
+        <motion.button
+          whileHover={{ scale: 1.05, x: 5 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            onStartSinglePlayer();
+            if (onSetGameType) {
+              onSetGameType("ai");
+            }
+          }}
+          className="group relative bg-white border-2 border-blue-600 p-5 rounded-2xl shadow-[4px_4px_0px_0px_rgba(37,99,235,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] hover:cursor-pointer transition-all flex items-center justify-between"
+        >
+          <span className="text-xl font-bold text-blue-700">Um Jogador IA</span>
+          <div className="bg-blue-100 p-2 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+            👤
+          </div>
+        </motion.button>
+
 
         {/* Botão Multiplayer (Desabilitado por enquanto) */}
         <motion.button

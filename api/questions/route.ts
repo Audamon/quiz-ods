@@ -1,0 +1,63 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextResponse } from "next/server";
+import { Question } from "@/types/Question"; // Certifique-se de ter esse type
+
+// Defina a chave fora para falhar cedo caso não exista
+const API_KEY = process.env.GEMINI_API_KEY;
+const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
+
+export async function POST(req: Request) {
+  try {
+    // 1. Validação da API Key
+    if (!genAI) {
+      return NextResponse.json(
+        { error: "API Key não configurada" },
+        { status: 500 },
+      );
+    }
+
+    const { topic, ods } = await req.json();
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      generationConfig: { responseMimeType: "application/json" },
+    });
+
+    const prompt = `
+        Atue como um educador especializado em Computação e Cultura.
+        Gere 5 perguntas de múltipla escolha sobre o tema "${topic}" relacionado com conceitos de Computação e o Objetivo de Desenvolvimento Sustentável (ODS) número ${ods}.
+        
+        Retorne um ARRAY de objetos seguindo EXATAMENTE esta estrutura JSON:
+        [
+          {
+            "id": "string (uuid)",
+            "topic": "${topic}",
+            "ods": ${ods},
+            "question": "string",
+            "options": ["string", "string", "string", "string"],
+            "answerIndex": number (0-3),
+            "explanation": "string (conectando o tema cultural à computação)"
+          }
+        ]
+        Não adicione blocos de código Markdown, retorne apenas o JSON puro.
+      `;
+
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+
+    // 2. Parse e tipagem
+    const questions: Question[] = JSON.parse(text);
+
+    // 3. Retorno correto com NextResponse
+    return NextResponse.json(questions);
+  } catch (error) {
+    console.error("Erro na API Gemini:", error);
+
+    // Em vez de chamar getQuestions aqui (que é client-side),
+    // retornamos um erro para o front-end decidir o que fazer.
+    return NextResponse.json(
+      { error: "Falha ao gerar perguntas dinâmicas" },
+      { status: 500 },
+    );
+  }
+}

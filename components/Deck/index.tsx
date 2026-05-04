@@ -216,7 +216,7 @@ export default function Deck({
               <button
                 key={`${currentIndex}-${index}-`} // Garantindo chave única mesmo com opções repetidas
                 onClick={() => handleAnswerClick(index)}
-                className="text-left text-sm transition-all duration-200 ease-out md:h-22 md:w-48 cursor-pointer
+                className="text-left text-sm transition-all duration-200 ease-out md:min-h-22 md:w-48 cursor-pointer
              hover:bg-white/20 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]"
                 style={{
                   // Forçando a borda que o Tailwind não quis renderizar

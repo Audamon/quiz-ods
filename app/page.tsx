@@ -178,6 +178,13 @@ export default function JogoPage() {
             </div>
           </div>
 
+          {/* Disclaimer modo IA */}
+          {gameType === "ai" && (
+            <p className="text-xs text-slate-500 text-center max-w-sm">
+              ⚠️ Perguntas geradas por inteligência artificial. O conteúdo pode conter imprecisões.
+            </p>
+          )}
+
           {/* Área do Jogo com Animação de Transição */}
           <AnimatePresence mode="wait">
             <motion.div

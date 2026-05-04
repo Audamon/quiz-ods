@@ -86,7 +86,7 @@ export async function POST(req: Request) {
           model: modelName,
           generationConfig: { responseMimeType: "application/json" },
         },
-        { apiVersion: "v1" },
+        { apiVersion: "v1beta" },
       );
 
       const result = await model.generateContent(prompt);

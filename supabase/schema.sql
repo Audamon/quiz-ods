@@ -29,3 +29,29 @@ create table if not exists game_answers (
 -- Habilita Realtime nas duas tabelas
 alter publication supabase_realtime add table game_sessions;
 alter publication supabase_realtime add table game_answers;
+
+-- Políticas RLS para game_sessions (acesso público anônimo)
+alter table game_sessions enable row level security;
+
+create policy "Qualquer um pode criar sessão"
+  on game_sessions for insert
+  to anon with check (true);
+
+create policy "Qualquer um pode ver sessões"
+  on game_sessions for select
+  to anon using (true);
+
+create policy "Qualquer um pode atualizar sessão"
+  on game_sessions for update
+  to anon using (true) with check (true);
+
+-- Políticas RLS para game_answers (acesso público anônimo)
+alter table game_answers enable row level security;
+
+create policy "Qualquer um pode registrar resposta"
+  on game_answers for insert
+  to anon with check (true);
+
+create policy "Qualquer um pode ver respostas"
+  on game_answers for select
+  to anon using (true);

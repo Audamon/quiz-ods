@@ -39,6 +39,12 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
 
         setStatus("waiting");
 
+        const advance = (session: GameSession) => {
+          if (!mounted) return;
+          setStatus("ready");
+          setTimeout(() => onReady(session, playerId), 800);
+        };
+
         channelRef.current = supabase
           .channel(`lobby:${sess.id}`)
           .on(
@@ -51,13 +57,21 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
             },
             (payload) => {
               const updated = payload.new as GameSession;
-              if (updated.status === "playing") {
-                setStatus("ready");
-                setTimeout(() => onReady(updated, playerId), 800);
-              }
+              if (updated.status === "playing") advance(updated);
             },
           )
-          .subscribe();
+          .subscribe(async (subscriptionStatus) => {
+            // Quando a subscription confirma que está ativa, verifica se o
+            // player 2 já entrou enquanto a conexão estava sendo estabelecida
+            if (subscriptionStatus === "SUBSCRIBED") {
+              const { data } = await supabase
+                .from("game_sessions")
+                .select("*")
+                .eq("id", sess.id)
+                .single();
+              if (data && data.status === "playing") advance(data as GameSession);
+            }
+          });
       } catch (err) {
         console.error("Lobby error:", err);
       }

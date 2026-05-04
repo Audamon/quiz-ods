@@ -8,12 +8,50 @@ export const dynamic = "force-dynamic";
 // Cache servidor: persiste enquanto o processo Node estiver rodando
 const questionCache = new Map<string, Question[]>();
 
-const MODELS = ["gemini-3-flash-preview", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.0-flash-lite"];
+const MODELS = [
+  "gemini-3-flash-preview",
+  "gemini-2.5-flash",
+  "gemini-2.0-flash",
+  "gemini-2.0-flash-lite",
+];
+
+const ODS_DESCRIPTIONS: Record<number, string> = {
+  1: "Erradicação da pobreza",
+  2: "Fome zero e agricultura sustentável",
+  3: "Saúde e bem-estar",
+  4: "Educação de qualidade",
+  5: "Igualdade de gênero",
+  6: "Água potável e saneamento",
+  7: "Energia limpa e acessível",
+  8: "Trabalho decente e crescimento econômico",
+  9: "Indústria, inovação e infraestrutura",
+  10: "Redução das desigualdades",
+  11: "Cidades e comunidades sustentáveis",
+  12: "Consumo e produção responsáveis",
+  13: "Ação contra a mudança global do clima",
+  14: "Vida na água",
+  15: "Vida terrestre",
+  16: "Paz, justiça e instituições eficazes",
+  17: "Parcerias e meios de implementação",
+};
 
 function buildPrompt(topic: string, ods: number): string {
+  const odsLabel = ODS_DESCRIPTIONS[ods] ?? "Desenvolvimento Sustentável";
   return `
-    Atue como um educador especializado em Computação e Cultura.
-    Gere 5 perguntas de múltipla escolha sobre o tema "${topic}" relacionado com conceitos de Computação e o Objetivo de Desenvolvimento Sustentável (ODS) número ${ods}.
+    Você é um educador especializado em diversidade cultural brasileira.
+    Seu objetivo é criar perguntas para um jogo de cartas educativo que valoriza as culturas
+    regionais do Brasil e promove o respeito às diferenças, alinhado ao ODS ${ods} — ${odsLabel}.
+
+    Gere 5 perguntas de múltipla escolha sobre "${topic}", abordando aspectos como:
+    - Costumes, tradições e manifestações culturais da região
+    - Culinária típica, festas, música ou artesanato
+    - Gírias, expressões e curiosidades regionais
+    - A importância dessa cultura para a identidade e diversidade brasileira
+
+    As perguntas devem ser envolventes e educativas, estimulando o jogador a refletir sobre
+    a riqueza cultural do Brasil e a importância de conhecer e respeitar diferentes realidades.
+    Varie a posição da resposta correta entre as 5 perguntas: não coloque sempre na mesma opção.
+    O answerIndex deve ser distribuído entre 0, 1, 2 e 3 ao longo das perguntas.
 
     Retorne um ARRAY de objetos seguindo EXATAMENTE esta estrutura JSON:
     [
@@ -23,7 +61,7 @@ function buildPrompt(topic: string, ods: number): string {
         "question": "string",
         "options": ["string", "string", "string", "string"],
         "answerIndex": number (0-3),
-        "explanation": "string (conectando o tema cultural à computação)"
+        "explanation": "string (explicando a importância cultural do tema e sua relação com inclusão e diversidade)"
       }
     ]
     Não adicione blocos de código Markdown, retorne apenas o JSON puro.
@@ -86,7 +124,10 @@ export async function POST(req: Request) {
     }
   }
 
-  console.warn("Todos os modelos falharam, usando perguntas locais:", lastError?.message);
+  console.warn(
+    "Todos os modelos falharam, usando perguntas locais:",
+    lastError?.message,
+  );
 
   return NextResponse.json(localQuestions.cartas as Question[]);
 }

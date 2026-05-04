@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 // Cache servidor: persiste enquanto o processo Node estiver rodando
 const questionCache = new Map<string, Question[]>();
 
-const MODELS = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-flash-8b"];
+const MODELS = ["gemini-2.0-flash", "gemini-2.0-flash-lite"];
 
 function buildPrompt(topic: string, ods: number): string {
   return `
@@ -103,8 +103,8 @@ export async function POST(req: Request) {
       lastError = error as GeminiError;
       console.error(`Erro com modelo ${modelName}:`, lastError.message);
 
-      // Só tenta o próximo modelo se for erro de quota (429)
-      if (lastError.status !== 429) break;
+      // Continua para o próximo modelo em caso de quota (429) ou modelo indisponível (404)
+      if (lastError.status !== 429 && lastError.status !== 404) break;
     }
   }
 

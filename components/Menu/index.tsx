@@ -61,15 +61,20 @@ export default function Menu({
           </div>
         </motion.button>
 
-        {/* Botão Multiplayer (Desabilitado por enquanto) */}
+        {/* Botão Multiplayer */}
         <motion.button
-          disabled
-          className="opacity-50 grayscale cursor-not-allowed bg-slate-100 border-2 border-slate-300 p-5 rounded-2xl flex items-center justify-between"
+          whileHover={{ scale: 1.05, x: 5 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            onStartSinglePlayer();
+            if (onSetGameType) onSetGameType("multi");
+          }}
+          className="group relative bg-white border-2 border-purple-600 p-5 rounded-2xl shadow-[4px_4px_0px_0px_rgba(147,51,234,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] hover:cursor-pointer transition-all flex items-center justify-between"
         >
-          <span className="text-xl font-bold text-slate-500">Multiplayer</span>
-          <span className="text-xs font-bold bg-slate-300 text-slate-600 px-2 py-1 rounded">
-            EM BREVE
-          </span>
+          <span className="text-xl font-bold text-purple-700">Multiplayer</span>
+          <div className="bg-purple-100 p-2 rounded-lg group-hover:bg-purple-600 group-hover:text-white transition-colors">
+            🎮
+          </div>
         </motion.button>
       </div>
     </div>

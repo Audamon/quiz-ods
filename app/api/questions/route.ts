@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 // Cache servidor: persiste enquanto o processo Node estiver rodando
 const questionCache = new Map<string, Question[]>();
 
-const MODELS = ["gemini-2.0-flash", "gemini-2.0-flash-lite"];
+const MODELS = ["gemini-3-flash-preview", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.0-flash-lite"];
 
 function buildPrompt(topic: string, ods: number): string {
   return `

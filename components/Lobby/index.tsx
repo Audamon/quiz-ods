@@ -68,7 +68,7 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
                 .from("game_sessions")
                 .select("*")
                 .eq("id", sess.id)
-                .single();
+                .maybeSingle();
               if (data && data.status === "playing") advance(data as GameSession);
             }
           });

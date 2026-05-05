@@ -37,6 +37,9 @@ export async function joinOrCreateSession(
 ): Promise<GameSession> {
   const playerId = getOrCreatePlayerId();
 
+  // Só considera sessões criadas nos últimos 10 minutos para evitar entrar em salas abandonadas
+  const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+
   // Tenta entrar numa sala que está esperando
   const { data: waiting } = await supabase
     .from("game_sessions")
@@ -44,9 +47,10 @@ export async function joinOrCreateSession(
     .eq("status", "waiting")
     .is("player2_id", null)
     .neq("player1_id", playerId)
+    .gte("created_at", tenMinutesAgo)
     .order("created_at", { ascending: true })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (waiting) {
     const { data: updated, error } = await supabase
@@ -73,6 +77,15 @@ export async function joinOrCreateSession(
 
   if (error) throw error;
   return created as GameSession;
+}
+
+// Remove sessão que ainda está em espera (jogador cancelou o lobby)
+export async function cancelSession(sessionId: string): Promise<void> {
+  await supabase
+    .from("game_sessions")
+    .delete()
+    .eq("id", sessionId)
+    .eq("status", "waiting");
 }
 
 // Registra a resposta do jogador para uma pergunta

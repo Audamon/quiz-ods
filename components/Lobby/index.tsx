@@ -7,6 +7,7 @@ import {
   GameSession,
   getOrCreatePlayerId,
   joinOrCreateSession,
+  cancelSession,
 } from "@/services/multiplayerService";
 import { supabase } from "@/lib/supabase";
 
@@ -18,13 +19,26 @@ interface LobbyProps {
 
 type LobbyStatus = "connecting" | "waiting" | "ready";
 
+const POLL_INTERVAL_MS = 2000;
+
 export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
   const [status, setStatus] = useState<LobbyStatus>("connecting");
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const advancedRef = useRef(false);
+  const sessionIdRef = useRef<string | null>(null);
   const playerId = getOrCreatePlayerId();
 
   useEffect(() => {
     let mounted = true;
+
+    const advance = (session: GameSession) => {
+      if (!mounted || advancedRef.current) return;
+      advancedRef.current = true;
+      if (pollRef.current) clearInterval(pollRef.current);
+      setStatus("ready");
+      setTimeout(() => onReady(session, playerId), 800);
+    };
 
     async function connect() {
       try {
@@ -32,19 +46,14 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
         if (!mounted) return;
 
         if (sess.status === "playing") {
-          setStatus("ready");
-          setTimeout(() => onReady(sess, playerId), 800);
+          advance(sess);
           return;
         }
 
         setStatus("waiting");
+        sessionIdRef.current = sess.id;
 
-        const advance = (session: GameSession) => {
-          if (!mounted) return;
-          setStatus("ready");
-          setTimeout(() => onReady(session, playerId), 800);
-        };
-
+        // Realtime: recebe o UPDATE quando player 2 entrar
         channelRef.current = supabase
           .channel(`lobby:${sess.id}`)
           .on(
@@ -60,18 +69,18 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
               if (updated.status === "playing") advance(updated);
             },
           )
-          .subscribe(async (subscriptionStatus) => {
-            // Quando a subscription confirma que está ativa, verifica se o
-            // player 2 já entrou enquanto a conexão estava sendo estabelecida
-            if (subscriptionStatus === "SUBSCRIBED") {
-              const { data } = await supabase
-                .from("game_sessions")
-                .select("*")
-                .eq("id", sess.id)
-                .maybeSingle();
-              if (data && data.status === "playing") advance(data as GameSession);
-            }
-          });
+          .subscribe();
+
+        // Polling: fallback caso o evento realtime não chegue
+        pollRef.current = setInterval(async () => {
+          if (advancedRef.current) return;
+          const { data } = await supabase
+            .from("game_sessions")
+            .select("*")
+            .eq("id", sess.id)
+            .maybeSingle();
+          if (data?.status === "playing") advance(data as GameSession);
+        }, POLL_INTERVAL_MS);
       } catch (err) {
         console.error("Lobby error:", err);
       }
@@ -80,6 +89,7 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
     connect();
     return () => {
       mounted = false;
+      if (pollRef.current) clearInterval(pollRef.current);
       if (channelRef.current) supabase.removeChannel(channelRef.current);
     };
   }, []);
@@ -106,7 +116,10 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
 
       {status !== "ready" && (
         <button
-          onClick={onCancel}
+          onClick={() => {
+            if (sessionIdRef.current) cancelSession(sessionIdRef.current);
+            onCancel();
+          }}
           className="text-slate-500 hover:text-white text-sm underline cursor-pointer transition-colors"
         >
           Cancelar

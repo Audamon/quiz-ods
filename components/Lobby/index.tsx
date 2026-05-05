@@ -74,12 +74,12 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
         // Polling: fallback caso o evento realtime não chegue
         pollRef.current = setInterval(async () => {
           if (advancedRef.current) return;
-          const { data } = await supabase
+          const { data, error } = await supabase
             .from("game_sessions")
             .select("*")
             .eq("id", sess.id)
             .maybeSingle();
-          if (data?.status === "playing") advance(data as GameSession);
+if (data?.status === "playing") advance(data as GameSession);
         }, POLL_INTERVAL_MS);
       } catch (err) {
         console.error("Lobby error:", err);

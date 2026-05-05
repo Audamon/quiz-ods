@@ -31,52 +31,21 @@ export function getOrCreatePlayerId(): string {
   return id;
 }
 
-// Procura sala em espera ou cria uma nova
+// Procura sala em espera ou cria uma nova (atomicamente via RPC)
 export async function joinOrCreateSession(
   questions: Question[],
 ): Promise<GameSession> {
   const playerId = getOrCreatePlayerId();
 
-  // Só considera sessões criadas nos últimos 10 minutos para evitar entrar em salas abandonadas
-  const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
-
-  // Tenta entrar numa sala que está esperando
-  const { data: waiting } = await supabase
-    .from("game_sessions")
-    .select("*")
-    .eq("status", "waiting")
-    .is("player2_id", null)
-    .neq("player1_id", playerId)
-    .gte("created_at", tenMinutesAgo)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-
-  if (waiting) {
-    const { data: updated, error } = await supabase
-      .from("game_sessions")
-      .update({ player2_id: playerId, status: "playing" })
-      .eq("id", waiting.id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return updated as GameSession;
-  }
-
-  // Nenhuma sala disponível — cria uma nova
-  const { data: created, error } = await supabase
-    .from("game_sessions")
-    .insert({
-      player1_id: playerId,
-      questions,
-      status: "waiting",
-    })
-    .select()
-    .single();
+  const { data, error } = await supabase.rpc("match_or_create_session", {
+    p_player_id: playerId,
+    p_questions: questions,
+  });
 
   if (error) throw error;
-  return created as GameSession;
+  const session = Array.isArray(data) ? data[0] : data;
+  if (!session) throw new Error("Falha ao criar ou entrar na sessão");
+  return session as GameSession;
 }
 
 // Remove sessão que ainda está em espera (jogador cancelou o lobby)

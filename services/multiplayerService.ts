@@ -43,9 +43,17 @@ export async function joinOrCreateSession(
   });
 
   if (error) throw error;
-  const session = Array.isArray(data) ? data[0] : data;
-  if (!session) throw new Error("Falha ao criar ou entrar na sessão");
-  return session as GameSession;
+  const raw = Array.isArray(data) ? data[0] : data;
+  if (!raw) throw new Error("Falha ao criar ou entrar na sessão");
+
+  // JSONB pode chegar como string dependendo do driver — garante que é array
+  const session: GameSession = {
+    ...raw,
+    questions: Array.isArray(raw.questions)
+      ? raw.questions
+      : JSON.parse(raw.questions ?? "[]"),
+  };
+  return session;
 }
 
 // Remove sessão que ainda está em espera (jogador cancelou o lobby)

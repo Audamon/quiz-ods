@@ -87,7 +87,14 @@ export default function MultiplayerGame({
           filter: `id=eq.${session.id}`,
         },
         (payload) => {
-          const updated = payload.new as GameSession;
+          const raw = payload.new as GameSession;
+          const updated: GameSession = {
+            ...raw,
+            // Realtime pode entregar questions como string JSON
+            questions: Array.isArray(raw.questions)
+              ? raw.questions
+              : initialSession.questions,
+          };
           setSession(updated);
           if (updated.status === "finished") {
             setTimeout(() => onGameEnd(updated), 2000);

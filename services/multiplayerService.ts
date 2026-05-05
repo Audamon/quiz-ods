@@ -46,13 +46,20 @@ export async function joinOrCreateSession(
   const raw = Array.isArray(data) ? data[0] : data;
   if (!raw) throw new Error("Falha ao criar ou entrar na sessão");
 
-  // JSONB pode chegar como string dependendo do driver — garante que é array
-  const session: GameSession = {
-    ...raw,
-    questions: Array.isArray(raw.questions)
-      ? raw.questions
-      : JSON.parse(raw.questions ?? "[]"),
-  };
+  // JSONB pode chegar como string ou null — garante que é array válido
+  let parsedQuestions: Question[] = [];
+  if (Array.isArray(raw.questions) && raw.questions.length > 0) {
+    parsedQuestions = raw.questions;
+  } else if (typeof raw.questions === "string" && raw.questions.length > 2) {
+    parsedQuestions = JSON.parse(raw.questions);
+  } else {
+    // Último recurso: usa as perguntas passadas pelo cliente
+    parsedQuestions = questions;
+  }
+
+  console.log("[MP] sessão recebida:", raw.id, "questions:", parsedQuestions.length, "status:", raw.status);
+
+  const session: GameSession = { ...raw, questions: parsedQuestions };
   return session;
 }
 

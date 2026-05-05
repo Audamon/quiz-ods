@@ -32,6 +32,9 @@ export default function MultiplayerGame({
   playerId,
   onGameEnd,
 }: Props) {
+  // questions vem do initialSession — nunca muda e não está no payload do Realtime
+  const questions = initialSession.questions;
+
   const [session, setSession] = useState<GameSession>(initialSession);
   const [myAnswer, setMyAnswer] = useState<number | null>(null);
   const [answers, setAnswers] = useState<GameAnswer[]>([]);
@@ -40,14 +43,14 @@ export default function MultiplayerGame({
 
   const isPlayer1 = playerId === session.player1_id;
   const qIndex = session.current_question_index;
-  const question: Question = session.questions[qIndex];
+  const question: Question | undefined = questions[qIndex];
   const opponentId = isPlayer1 ? session.player2_id! : session.player1_id;
 
   const myAnswerObj = answers.find((a) => a.player_id === playerId);
   const opponentAnswerObj = answers.find((a) => a.player_id === opponentId);
   const bothAnswered = !!myAnswerObj && !!opponentAnswerObj;
 
-  const winner = bothAnswered ? getWinner(answers, question.answerIndex) : null;
+  const winner = bothAnswered && question ? getWinner(answers, question.answerIndex) : null;
   const iWon = winner === playerId;
 
   const myScore = isPlayer1 ? session.score_p1 : session.score_p2;
@@ -87,13 +90,9 @@ export default function MultiplayerGame({
           filter: `id=eq.${session.id}`,
         },
         (payload) => {
-          const raw = payload.new as GameSession;
           const updated: GameSession = {
-            ...raw,
-            // Realtime pode entregar questions como string JSON
-            questions: Array.isArray(raw.questions)
-              ? raw.questions
-              : initialSession.questions,
+            ...(payload.new as GameSession),
+            questions, // sempre usa as perguntas do initialSession
           };
           setSession(updated);
           if (updated.status === "finished") {
@@ -105,7 +104,8 @@ export default function MultiplayerGame({
     return () => {
       supabase.removeChannel(ch);
     };
-  }, [session.id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session.id]); // onGameEnd e questions são estáveis durante toda a partida
 
   // Realtime: respostas inseridas nesta sessão
   useEffect(() => {
@@ -152,6 +152,13 @@ export default function MultiplayerGame({
 
     await submitAnswer(session.id, qIndex, index);
   };
+
+  if (!question) {
+    console.error("[MP] question undefined — questions:", questions.length, "qIndex:", qIndex);
+    return (
+      <div className="text-white text-center p-8">Carregando pergunta...</div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center w-full max-w-2xl mx-auto gap-5 text-white px-4">

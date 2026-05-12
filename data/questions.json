@@ -2,31 +2,255 @@
   "cartas": [
     {
       "id": "1",
-      "topic": "Patrimônio de Caxias",
+      "topic": "Diversidade Cultural Brasileira",
       "ods": 4,
-      "question": "O Monumento Nacional ao Imigrante, localizado na entrada de Caxias do Sul, foi inaugurado em 1954. Além de homenagear o passado, ele funciona como um espaço educativo. Qual é a principal função de preservarmos monumentos históricos para a educação da sociedade?",
+      "question": "Por que a diversidade cultural é importante para a sociedade?",
       "options": [
-        "Apenas decorar a entrada da cidade.",
-        "Garantir a manutenção da memória coletiva e o acesso à história local.",
-        "Servir como ponto de referência para motoristas.",
-        "Aumentar o valor dos imóveis ao redor."
+        "Porque elimina as diferenças entre as regiões.",
+        "Porque valoriza diferentes tradições, costumes e formas de viver.",
+        "Porque padroniza a cultura em todo o país.",
+        "Porque impede mudanças sociais."
       ],
       "answerIndex": 1,
-      "explanation": "A preservação do patrimônio histórico é fundamental para o ODS 4 (Educação de Qualidade), pois permite que as futuras gerações compreendam suas raízes e aprendam com a história da sua sociedade."
+      "explanation": "A diversidade cultural contribui para o aprendizado, respeito e valorização das diferentes formas de viver, alinhando-se ao ODS 4 (Educação de Qualidade)."
     },
     {
       "id": "2",
-      "topic": "Patrimônio de Caxias",
+      "topic": "Diversidade Cultural",
       "ods": 4,
-      "question": "O Monumento Nacional ao Imigrante, localizado na entrada de Caxias do Sul, foi inaugurado em 1954. Além de homenagear o passado, ele funciona como um espaço educativo. Qual é a principal função de preservarmos monumentos históricos para a educação da sociedade?",
+      "question": "Qual elemento abaixo é um exemplo de diversidade cultural no Brasil?",
       "options": [
-        "Apenas decorar a entrada da cidade.",
-        "Garantir a manutenção da memória coletiva e o acesso à história local.",
-        "Servir como ponto de referência para motoristas.",
-        "Aumentar o valor dos imóveis ao redor."
+        "Ter apenas um tipo de comida em todo o país",
+        "Falar apenas uma gíria em todas as regiões",
+        "Existência de diferentes festas, comidas e tradições em cada região",
+        "Uso de uma única forma de música nacional"
+      ],
+      "answerIndex": 2,
+      "explanation": "A diversidade cultural aparece nas diferenças entre costumes, culinária, festas e tradições de cada região do Brasil."
+    },
+    {
+      "id": "3",
+      "topic": "Gírias Regionais",
+      "ods": 4,
+      "question": "No Brasil, a palavra 'bah' é muito usada no Sul. O que ela geralmente expressa?",
+      "options": [
+        "Indiferença",
+        "Surpresa ou admiração",
+        "Tristeza",
+        "Raiva"
       ],
       "answerIndex": 1,
-      "explanation": "A preservação do patrimônio histórico é fundamental para o ODS 4 (Educação de Qualidade), pois permite que as futuras gerações compreendam suas raízes e aprendam com a história da sua sociedade."
+      "explanation": "A gíria 'bah' é típica do Sul do Brasil e expressa surpresa ou intensidade, mostrando como a linguagem varia entre regiões."
+    },
+    {
+      "id": "4",
+      "topic": "Costumes Regionais",
+      "ods": 4,
+      "question": "O hábito de tomar chimarrão é mais comum em qual região do Brasil?",
+      "options": [
+        "Nordeste",
+        "Sudeste",
+        "Sul",
+        "Centro-Oeste"
+      ],
+      "answerIndex": 2,
+      "explanation": "O chimarrão é uma tradição cultural forte na região Sul, especialmente no Rio Grande do Sul, representando convivência e identidade cultural."
+    },
+    {
+      "id": "5",
+      "topic": "Curiosidades Regionais",
+      "ods": 4,
+      "question": "Qual festa popular é uma das maiores expressões culturais da região Norte do Brasil?",
+      "options": [
+        "Carnaval do Rio de Janeiro",
+        "Festa do Peão de Barretos",
+        "Festival de Parintins",
+        "Oktoberfest"
+      ],
+      "answerIndex": 2,
+      "explanation": "O Festival de Parintins, no Amazonas, é uma importante manifestação cultural que envolve música, dança e tradição regional."
+    },
+    {
+      "id": "6",
+      "topic": "Peculiaridades Regionais",
+      "ods": 4,
+      "question": "Por que conhecer diferentes culturas regionais é importante na educação?",
+      "options": [
+        "Para substituir a cultura local.",
+        "Para criar competição entre regiões.",
+        "Para desenvolver respeito e compreensão entre diferentes povos.",
+        "Para evitar mudanças culturais."
+      ],
+      "answerIndex": 2,
+      "explanation": "Conhecer diferentes culturas amplia a visão de mundo e promove respeito, algo essencial dentro da proposta do ODS 4."
+    },
+    {
+      "id": "7",
+      "topic": "Culinaria Regional",
+      "ods": 4,
+      "question": "Qual prato é considerado típico da região Nordeste do Brasil?",
+      "options": [
+        "Churrasco",
+        "Feijoada",
+        "Acarajé",
+        "Pão de queijo"
+      ],
+      "answerIndex": 2,
+      "explanation": "O acarajé é um prato típico da Bahia e representa a forte influência da cultura africana na culinária nordestina."
+    },
+    {
+      "id": "8",
+      "topic": "culinaria regional",
+      "ods": 4,
+      "question": "Qual alimento e considerado um simbolo tradicional da cultura da Regiao Sul do Brasil?",
+      "options": [
+        "Acaraje",
+        "Tacaca",
+        "Churrasco",
+        "Baião de dois"
+      ],
+      "answerIndex": 2,
+      "explanation": "O churrasco e uma das principais tradicoes culinarias da Regiao Sul, especialmente no Rio Grande do Sul. A pratica esta ligada a cultura gaucha e ao passado ligado a pecuaria. Alem da alimentacao, o churrasco representa reunioes familiares e momentos de convivencia social."
+    },
+    {
+      "id": "9",
+      "topic": "tradicoes culturais",
+      "ods": 4,
+      "question": "O chimarrao possui grande importancia cultural na Regiao Sul do Brasil porque:",
+      "options": [
+        "E consumido apenas em festas religiosas",
+        "Representa um costume de convivencia e hospitalidade",
+        "Foi criado recentemente nas grandes cidades",
+        "E utilizado apenas como remedio natural"
+      ],
+      "answerIndex": 1,
+      "explanation": "O chimarrao e um simbolo cultural muito presente na Regiao Sul, especialmente entre os gauchos. Herdado de costumes indigenas, ele representa amizade, hospitalidade e convivencia social, sendo comum em encontros familiares, rodas de conversa e momentos de descanso."
+    },
+    {
+      "id": "10",
+      "topic": "festas tipicas",
+      "ods": 4,
+      "question": "As festas tipicas realizadas na Regiao Sul frequentemente valorizam:",
+      "options": [
+        "Somente culturas asiaticas",
+        "Tradicoes trazidas por imigrantes europeus",
+        "Exclusivamente costumes africanos",
+        "Apenas manifestacoes culturais urbanas modernas"
+      ],
+      "answerIndex": 1,
+      "explanation": "Diversas festas tradicionais da Regiao Sul celebram os costumes herdados de imigrantes europeus. Eventos como festas da uva, oktoberfests e festivais folcloricos valorizam dancas, culinaria, roupas tipicas e musicas que fazem parte da identidade cultural da regiao."
+    },
+    {
+      "id": "11",
+      "topic": "economia e cultura",
+      "ods": 4,
+      "question": "Uma caracteristica importante da formacao cultural da Regiao Sul esta relacionada:",
+      "options": [
+        "Ao isolamento completo da regiao",
+        "A influencia exclusiva das capitais",
+        "A relacao entre agricultura familiar e tradicoes locais",
+        "Ao desaparecimento das culturas tradicionais"
+      ],
+      "answerIndex": 2,
+      "explanation": "A agricultura familiar teve grande importancia na ocupacao e no desenvolvimento cultural da Regiao Sul. Muitos imigrantes europeus estabeleceram pequenas propriedades rurais, preservando costumes, culinaria, idiomas e festas tradicionais que ainda influenciam a vida cultural da regiao."
+    },
+    {
+      "id": "12",
+      "topic": "influencia europeia no sul",
+      "ods": 4,
+      "question": "A regiao Sul do Brasil apresenta forte influencia europeia. Qual fator historico explica isso?",
+      "options": [
+        "Presenca exclusiva de povos indigenas",
+        "Migracao de africanos escravizados em massa no seculo XX",
+        "Politicas de imigracao europeia no seculo XIX",
+        "Isolamento geografico total"
+      ],
+      "answerIndex": 2,
+      "explanation": "A forte identidade cultural do Sul esta diretamente ligada as politicas de imigracao europeia no seculo XIX, incentivadas pelo governo brasileiro."
+    },
+    {
+      "id": "13",
+      "topic": "formacao historica",
+      "ods": 4,
+      "question": "Uma diferenca cultural marcante dentro do Sudeste esta relacionada a formacao historica. Qual alternativa explica corretamente essa diversidade?",
+      "options": [
+        "Todos os estados tiveram colonizacao exclusivamente indigena",
+        "A regiao foi ocupada de forma homogenea ao mesmo tempo",
+        "Diferentes ciclos economicos (ouro, cafe) atrairam populacoes diversas",
+        "Nao houve influencia de imigrantes estrangeiros"
+      ],
+      "answerIndex": 2,
+      "explanation": "A diversidade cultural do Sudeste esta diretamente ligada aos diferentes ciclos economicos ao longo da historia, que atrairam populacoes distintas para cada area da regiao."
+    },
+    {
+      "id": "14",
+      "topic": "diferenca entre Para e Santa Catarina",
+      "ods": 4,
+      "question": "Qual caracteristica diferencia Para e Santa Catarina?",
+      "options": [
+        "O Para tem culinaria com influencia Indigena, enquanto SC tem influencia europeia",
+        "Ambos tem culinaria baseada em frutos do mar",
+        "Santa Catarina nao tem tradicao cultural",
+        "O Para tem o clima frio predominante"
+      ],
+      "answerIndex": 0,
+      "explanation": "O Para destaca-se pela culinaria amazonica com raizes indigenas, enquanto Santa Catarina tem forte influencia europeia, refletida na gastronomia e nas festas tipicas."
+    },
+    {
+      "id": "15",
+      "topic": "diferenca entre Amazonas e Ceara",
+      "ods": 4,
+      "question": "Qual caracteristica diferencia o Amazonas do Ceara?",
+      "options": [
+        "Ambos tem clima semiarido predominante",
+        "O Amazonas tem forte influencia dos rios, enquanto o Ceara sofre com secas",
+        "O Ceara e coberto pela floresta Amazonica",
+        "Nao ha diferencas ambientais relevantes"
+      ],
+      "answerIndex": 1,
+      "explanation": "O Amazonas e marcado pela floresta e pelos rios, enquanto o Ceara esta no semiarido, com clima seco e desafios relacionados a escassez de agua."
+    },
+    {
+      "id": "16",
+      "topic": "diferenca entre Mato Grosso e Mato Grosso do Sul",
+      "ods": 4,
+      "question": "Qual a diferenca importante entre Mato Grosso e Mato Grosso do Sul?",
+      "options": [
+        "Mato Grosso do Sul nao tem agronegocio",
+        "Mato Grosso tem mais influencia pantaneira que o Sul",
+        "Nao ha diferencas culturais relevantes",
+        "Mato Grosso do Sul tem identidade mais ligada ao Pantanal"
+      ],
+      "answerIndex": 3,
+      "explanation": "Embora ambos tenham o Pantanal, ele e muito mais central na identidade de Mato Grosso do Sul. Ja o Mato Grosso tem uma identidade mais ligada ao agronegocio e a expansao territorial."
+    },
+    {
+      "id": "17",
+      "topic": "estrategias digitais para a preservacao do manifesto cultural do nordeste",
+      "ods": 4,
+      "question": "Na Regiao Nordeste, qual estrategia digital favorece a preservacao de manifestacoes culturais como o cordel?",
+      "options": [
+        "Digitalizar e compartilhar cordeis em bibliotecas virtuais e redes sociais",
+        "Proibir a circulacao de cordeis fisicos",
+        "Priorizar apenas conteudos estrangeiros nas escolas",
+        "Restringir o acesso a leitura digital"
+      ],
+      "answerIndex": 0,
+      "explanation": "Quando os cordeis sao digitalizados e compartilhados em bibliotecas virtuais e redes sociais, eles passam a alcancar muito mais pessoas, inclusive jovens que ja estao acostumados com o ambiente digital. Isso facilita o acesso, evita que essas obras se percam com o tempo e ainda amplia o reconhecimento dessa forma de expressao."
+    },
+    {
+      "id": "18",
+      "topic": "aprendizagem digital",
+      "ods": 4,
+      "question": "Como a aprendizagem digital pode contribuir para a valorizacao das culturas indigenas da Regiao Norte?",
+      "options": [
+        "Substituindo completamente os saberes tradicionais por conteudos digitais globais",
+        "Registrando e divulgando linguas e tradicoes indigenas por meio de plataformas digitais",
+        "Impedindo o acesso das comunidades indigenas a internet",
+        "Limitando o uso da tecnologia as areas urbanas"
+      ],
+      "answerIndex": 1,
+      "explanation": "A aprendizagem digital pode servir como uma ferramenta para registrar linguas, tradicoes, historias e conhecimentos que fazem parte dessas culturas, ajudando a preserva-los ao longo do tempo. Alem disso, ao divulgar esses conteudos em plataformas digitais, essas culturas ganham mais visibilidade, permitindo que outras pessoas conhecam e valorizem essa diversidade."
     }
   ]
 }

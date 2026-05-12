@@ -144,6 +144,8 @@ export default function Deck({
     },
   };
 
+  const optionColors = ["#4472A8", "#3A876E", "#A07040", "#7B5EA7"];
+
   return (
     <div className="flex flex-col lg:flex-row 2xl:flex-col items-center shrink-0 justify-center scroll-auto w-full max-w-4xl mx-auto gap-8  py-10 [transform-style:preserve-3d] perspective-1000">
       {/* Container do Monte (Deck) Angulado */}
@@ -227,13 +229,14 @@ export default function Deck({
                   outline: "none",
                   borderRadius: "8px",
                   boxSizing: "border-box",
+                  color: "white",
                   background: isAnswered
                     ? index === question.answerIndex
-                      ? "#4ade80" // sempre verde = resposta correta
+                      ? "#4ade80"
                       : index === selectedIndex
-                        ? "#f87171" // vermelho = o que o usuário clicou errado
-                        : "#155dfc" // outros ficam azul
-                    : "#155dfc",
+                        ? "#f87171"
+                        : optionColors[index]
+                    : optionColors[index],
                 }}
               >
                 {option}

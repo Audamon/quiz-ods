@@ -65,13 +65,16 @@ export default function Menu({
         <motion.button
           whileHover={{ scale: 1.05, x: 5 }}
           whileTap={{ scale: 0.95 }}
+          disabled
           onClick={() => {
             onStartSinglePlayer();
             if (onSetGameType) onSetGameType("multi");
           }}
           className="group relative bg-white border-2 border-purple-600 p-5 rounded-2xl shadow-[4px_4px_0px_0px_rgba(147,51,234,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] hover:cursor-pointer transition-all flex items-center justify-between"
         >
-          <span className="text-xl font-bold text-purple-700">Multiplayer</span>
+          <span className="text-xl font-bold text-purple-700">
+            Multiplayer em breve
+          </span>
           <div className="bg-purple-100 p-2 rounded-lg group-hover:bg-purple-600 group-hover:text-white transition-colors">
             🎮
           </div>

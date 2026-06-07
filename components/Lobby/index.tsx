@@ -27,6 +27,7 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const advancedRef = useRef(false);
   const sessionIdRef = useRef<string | null>(null);
+  const sessionRef = useRef<GameSession | null>(null);
   const playerId = getOrCreatePlayerId();
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
       try {
         const sess = await joinOrCreateSession(questions);
         if (!mounted) return;
-
+        sessionRef.current = sess;
         if (sess.status === "playing") {
           advance(sess);
           return;
@@ -67,7 +68,7 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
             },
             (payload) => {
               const updated = payload.new as GameSession;
-              if (updated.status === "playing") advance(updated);
+              if (updated.status === "playing") advance({...updated, questions: sessionRef.current!.questions});
             },
           )
           .subscribe();
@@ -80,7 +81,7 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
             .select("*")
             .eq("id", sess.id)
             .maybeSingle();
-if (data?.status === "playing") advance(data as GameSession);
+if (data?.status === "playing")  advance({ ...(data as GameSession), questions: sessionRef.current!.questions });
         }, POLL_INTERVAL_MS);
       } catch (err) {
         console.error("Lobby error:", err);

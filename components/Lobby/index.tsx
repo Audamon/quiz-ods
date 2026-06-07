@@ -31,7 +31,8 @@ export default function Lobby({ questions, onReady, onCancel }: LobbyProps) {
 
   useEffect(() => {
     let mounted = true;
-
+    advancedRef.current =false;
+    sessionIdRef.current = null;
     const advance = (session: GameSession) => {
       if (!mounted || advancedRef.current) return;
       advancedRef.current = true;

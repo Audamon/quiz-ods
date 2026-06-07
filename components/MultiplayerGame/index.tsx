@@ -65,17 +65,23 @@ export default function MultiplayerGame({
   }, [qIndex]);
 
   // Avança automaticamente quando os dois respondem
-  useEffect(() => {
-    if (!bothAnswered || advanceCalledRef.current) return;
-    advanceCalledRef.current = true;
-    setShowResult(true);
+ useEffect(() => {
+  if (!bothAnswered || advanceCalledRef.current) return;
+  advanceCalledRef.current = true;
+  setShowResult(true);
 
-    if (isPlayer1) {
-      setTimeout(() => {
-        advanceQuestion(session, winner);
-      }, 2500);
-    }
-  }, [bothAnswered]);
+  if (isPlayer1) {
+    setTimeout(() => {
+      setAnswers((currentAnswers) => {
+        const currentWinner = question
+          ? getWinner(currentAnswers, question.answerIndex)
+          : null;
+        advanceQuestion(session, currentWinner);
+        return currentAnswers; // não muda o state, só lê
+      });
+    }, 2500);
+  }
+}, [bothAnswered]);
 
   // Realtime: mudanças na sessão (índice da pergunta, placar, status)
   useEffect(() => {
@@ -119,15 +125,18 @@ export default function MultiplayerGame({
           table: "game_answers",
           filter: `session_id=eq.${session.id}`,
         },
-        (payload) => {
-          const ans = payload.new as GameAnswer;
-          if (ans.question_index !== qIndex) return;
-          setAnswers((prev) =>
-            prev.find((a) => a.player_id === ans.player_id)
-              ? prev
-              : [...prev, ans],
+       (payload) => {
+        const ans = payload.new as GameAnswer;
+        if (ans.question_index !== qIndex) return;
+        setAnswers((prev) => {
+          const withoutOptimistic = prev.filter(
+            (a) => !(a.player_id === ans.player_id && a.id !== ans.id)
           );
-        },
+          return withoutOptimistic.find((a) => a.id === ans.id)
+            ? withoutOptimistic
+            : [...withoutOptimistic, ans];
+        });
+      },
       )
       .subscribe();
     return () => {
@@ -146,7 +155,7 @@ export default function MultiplayerGame({
       player_id: playerId,
       question_index: qIndex,
       answer_index: index,
-      answered_at: new Date().toISOString(),
+      answered_at:"9999-12-31T00:00:00Z",
     };
     setAnswers((prev) => [...prev, optimistic]);
 

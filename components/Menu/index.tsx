@@ -65,7 +65,7 @@ export default function Menu({
         <motion.button
           whileHover={{ scale: 1.05, x: 5 }}
           whileTap={{ scale: 0.95 }}
-          disabled
+          //disabled
           onClick={() => {
             onStartSinglePlayer();
             if (onSetGameType) onSetGameType("multi");

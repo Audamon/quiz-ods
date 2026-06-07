@@ -172,7 +172,8 @@ export default function MultiplayerGame({
   return (
     <div className="flex flex-col items-center w-full max-w-2xl mx-auto gap-5 text-white px-4">
       {/* Placar */}
-      <div className="flex w-full justify-between items-center bg-slate-800 rounded-2xl px-6 py-3">
+      <div  className="flex
+       w-full justify-between items-center bg-slate-800 rounded-2xl px-6 py-3">
         <div className="text-center">
           <div className="text-xs text-slate-400 uppercase tracking-wide">
             Você
